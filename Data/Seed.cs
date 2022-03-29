@@ -53,6 +53,37 @@ namespace Quiz_api.Data
             }
                 
             }
+
+
+            if(!context.Quizzes.Any()){
+                var Quizzes = new List<Quiz>{
+                    new Quiz{
+                        Question= "input the question here",
+                        Answer = 1,
+                        ContiansImage = true,
+
+                        QuizImages = new List<QuizImage>(){
+                            new QuizImage{
+                                ID= 1,
+                                URL= "Just put the image name example ------  'Imgae.jpg'  --------   " 
+                            }
+                        },
+
+                        options = new List<Option>(){
+                            //option-1
+                            new Option{
+                                ID =1,
+                                Description= "quiz option goes here -- 1",
+                                ContiansImage = true,
+                                
+                                
+
+                            }
+                        }
+
+                    }
+                };
+            }
             
             
         }

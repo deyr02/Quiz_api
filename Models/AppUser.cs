@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
 namespace Quiz_api.Models
@@ -8,6 +9,8 @@ namespace Quiz_api.Models
         public string FirstName {get; set;}
         public string LastName {get; set;}
         public DateTime DOB {get; set;}
+
+        public ICollection<Attempt> attempts {get; set;}
 
     }
 
