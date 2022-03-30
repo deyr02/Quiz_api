@@ -81,6 +81,7 @@ namespace Quiz_api.Controllers
 
         private AppUserDTO CreateUserObject(AppUser user){
             return new AppUserDTO{
+                ID= user.Id,
                 LastName = user.LastName,
                 FirstName =user.FirstName,
                 Eamil = user.Email,

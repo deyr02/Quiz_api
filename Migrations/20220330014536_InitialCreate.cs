@@ -50,6 +50,23 @@ namespace Quiz_api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Quizzes",
+                columns: table => new
+                {
+                    ID = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Question = table.Column<string>(type: "TEXT", nullable: true),
+                    IsAnswerMultiple = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Answers = table.Column<string>(type: "TEXT", nullable: true),
+                    ContiansImage = table.Column<bool>(type: "INTEGER", nullable: false),
+                    URL = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Quizzes", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -155,6 +172,76 @@ namespace Quiz_api.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Attempts",
+                columns: table => new
+                {
+                    ID = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    IsSubmitted = table.Column<bool>(type: "INTEGER", nullable: false),
+                    TotalQuestions = table.Column<int>(type: "INTEGER", nullable: false),
+                    TotalCorrectAnswer = table.Column<int>(type: "INTEGER", nullable: false),
+                    AppUserId = table.Column<Guid>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Attempts", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Attempts_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Options",
+                columns: table => new
+                {
+                    ID = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    ContiansImage = table.Column<bool>(type: "INTEGER", nullable: false),
+                    URL = table.Column<string>(type: "TEXT", nullable: true),
+                    QuizID = table.Column<long>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Options", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Options_Quizzes_QuizID",
+                        column: x => x.QuizID,
+                        principalTable: "Quizzes",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AttemptLines",
+                columns: table => new
+                {
+                    AttemptID = table.Column<long>(type: "INTEGER", nullable: false),
+                    QuizID = table.Column<long>(type: "INTEGER", nullable: false),
+                    IsAnswered = table.Column<bool>(type: "INTEGER", nullable: false),
+                    SelectedOption = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AttemptLines", x => new { x.AttemptID, x.QuizID });
+                    table.ForeignKey(
+                        name: "FK_AttemptLines_Attempts_AttemptID",
+                        column: x => x.AttemptID,
+                        principalTable: "Attempts",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AttemptLines_Quizzes_QuizID",
+                        column: x => x.QuizID,
+                        principalTable: "Quizzes",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -191,6 +278,21 @@ namespace Quiz_api.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AttemptLines_QuizID",
+                table: "AttemptLines",
+                column: "QuizID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Attempts_AppUserId",
+                table: "Attempts",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Options_QuizID",
+                table: "Options",
+                column: "QuizID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -211,7 +313,19 @@ namespace Quiz_api.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "AttemptLines");
+
+            migrationBuilder.DropTable(
+                name: "Options");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Attempts");
+
+            migrationBuilder.DropTable(
+                name: "Quizzes");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

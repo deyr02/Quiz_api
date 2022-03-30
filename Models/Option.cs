@@ -15,6 +15,5 @@ namespace Quiz_api.Models
         public long QuizID {get; set;}
         public Quiz  Quiz {get; set;}
 
-        public ICollection<OptionImage> OptionImages{get; set;}
     }
 }

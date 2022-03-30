@@ -14,9 +14,8 @@ namespace Quiz_api.Data
         public DbSet<Attempt> Attempts{get; set;}
         public DbSet<AttemptLines> AttemptLines {get; set;}
         public DbSet<Quiz> Quizzes{get; set;}
-        public DbSet<QuizImage> QuizImages {get; set;}
         public DbSet<Option> Options{get; set;}
-        public DbSet<OptionImage> OptionImages {get; set;}
+       
         
       protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -26,13 +25,7 @@ namespace Quiz_api.Data
             // Add your customizations after calling base.OnModelCreating(builder);
 
 
-            builder.Entity<QuizImage>()
-                .HasOne(p=> p.Quiz)
-                .WithMany(b => b.QuizImages);
-
-            builder.Entity<OptionImage>()
-                .HasOne(P=> P.option)
-                .WithMany(b=> b.OptionImages);
+        
 
 
             builder.Entity<Option>()
@@ -52,12 +45,12 @@ namespace Quiz_api.Data
             builder.Entity<AttemptLines>()
                 .HasOne(A => A.Attempt)
                 .WithMany(Q=> Q.Attemptlines)
-                .HasForeignKey(pt => pt.QuizID);
+                .HasForeignKey(pt => pt.AttemptID);
 
             builder.Entity<AttemptLines>()
                 .HasOne(Q => Q.Quiz)
                 .WithMany(al => al.attemptLines)
-                .HasForeignKey(pt => pt.AttemptID);
+                .HasForeignKey(pt => pt.QuizID);
         }
     }
    

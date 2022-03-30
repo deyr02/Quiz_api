@@ -225,8 +225,8 @@ namespace Quiz_api.Migrations
                     b.Property<bool>("IsAnswered")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("SelectedOption")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("SelectedOption")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("AttemptID", "QuizID");
 
@@ -260,62 +260,30 @@ namespace Quiz_api.Migrations
                     b.ToTable("Options");
                 });
 
-            modelBuilder.Entity("Quiz_api.Models.OptionImage", b =>
-                {
-                    b.Property<long>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long>("OptionID")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("URL")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("OptionID");
-
-                    b.ToTable("OptionImages");
-                });
-
             modelBuilder.Entity("Quiz_api.Models.Quiz", b =>
                 {
                     b.Property<long>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("Answer")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Answers")
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("ContiansImage")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("IsAnswerMultiple")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Question")
                         .HasColumnType("TEXT");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Quizzes");
-                });
-
-            modelBuilder.Entity("Quiz_api.Models.QuizImage", b =>
-                {
-                    b.Property<long>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long>("QuizID")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("URL")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("QuizID");
-
-                    b.ToTable("QuizImages");
+                    b.ToTable("Quizzes");
                 });
 
             modelBuilder.Entity("Quiz_api.Models.Role", b =>
@@ -409,14 +377,14 @@ namespace Quiz_api.Migrations
 
             modelBuilder.Entity("Quiz_api.Models.AttemptLines", b =>
                 {
-                    b.HasOne("Quiz_api.Models.Quiz", "Quiz")
-                        .WithMany("attemptLines")
+                    b.HasOne("Quiz_api.Models.Attempt", "Attempt")
+                        .WithMany("Attemptlines")
                         .HasForeignKey("AttemptID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Quiz_api.Models.Attempt", "Attempt")
-                        .WithMany("Attemptlines")
+                    b.HasOne("Quiz_api.Models.Quiz", "Quiz")
+                        .WithMany("attemptLines")
                         .HasForeignKey("QuizID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -437,28 +405,6 @@ namespace Quiz_api.Migrations
                     b.Navigation("Quiz");
                 });
 
-            modelBuilder.Entity("Quiz_api.Models.OptionImage", b =>
-                {
-                    b.HasOne("Quiz_api.Models.Option", "option")
-                        .WithMany("OptionImages")
-                        .HasForeignKey("OptionID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("option");
-                });
-
-            modelBuilder.Entity("Quiz_api.Models.QuizImage", b =>
-                {
-                    b.HasOne("Quiz_api.Models.Quiz", "Quiz")
-                        .WithMany("QuizImages")
-                        .HasForeignKey("QuizID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Quiz");
-                });
-
             modelBuilder.Entity("Quiz_api.Models.AppUser", b =>
                 {
                     b.Navigation("attempts");
@@ -469,18 +415,11 @@ namespace Quiz_api.Migrations
                     b.Navigation("Attemptlines");
                 });
 
-            modelBuilder.Entity("Quiz_api.Models.Option", b =>
-                {
-                    b.Navigation("OptionImages");
-                });
-
             modelBuilder.Entity("Quiz_api.Models.Quiz", b =>
                 {
                     b.Navigation("attemptLines");
 
                     b.Navigation("options");
-
-                    b.Navigation("QuizImages");
                 });
 #pragma warning restore 612, 618
         }
